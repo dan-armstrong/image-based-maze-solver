@@ -1,1 +1,0 @@
-greyscale_grid <- data.matrix(fread(GREYSCALE_FILE))

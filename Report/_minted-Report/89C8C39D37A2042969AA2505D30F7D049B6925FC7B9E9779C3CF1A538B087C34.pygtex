@@ -1,4 +1,0 @@
-\begin{Verbatim}[commandchars=\\\{\}]
-frequencies\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{apply}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{)}                                  \PYG{c+c1}{\PYGZsh{}SUM ROWS AND COLUMNS SEPARATELY}
-frequencies\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{apply}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{)}
-\end{Verbatim}
