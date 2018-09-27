@@ -1,0 +1,43 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{n}{area\PYGZus{}vector} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{c}\PYG{p}{()}
+\PYG{k}{for} \PYG{p}{(}\PYG{n}{y} \PYG{o+ow}{in} \PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{nrow}\PYG{p}{(}\PYG{n}{area\PYGZus{}grid}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+  \PYG{k}{for} \PYG{p}{(}\PYG{n}{x} \PYG{o+ow}{in} \PYG{l+m+mi}{1}\PYG{p}{:}\PYG{n}{ncol}\PYG{p}{(}\PYG{n}{area\PYGZus{}grid}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+    \PYG{n}{data} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k}{as}\PYG{o}{.}\PYG{n}{integer}\PYG{p}{(}\PYG{n}{strsplit}\PYG{p}{(}\PYG{n}{area\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{],} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)[[}\PYG{l+m+mi}{1}\PYG{p}{]])}
+    \PYG{n}{area} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{*} \PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{area} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{n}{area\PYGZus{}vector} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{c}\PYG{p}{(}\PYG{n}{area\PYGZus{}vector}\PYG{p}{,} \PYG{n}{paste}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{n}{sep}\PYG{o}{=}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{))}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{k}{if} \PYG{p}{(}\PYG{n}{length}\PYG{p}{(}\PYG{n}{area\PYGZus{}vector}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{n}{area\PYGZus{}vector} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{merge\PYGZus{}sort}\PYG{p}{(}\PYG{n}{na}\PYG{o}{.}\PYG{n}{omit}\PYG{p}{(}\PYG{n}{area\PYGZus{}vector}\PYG{p}{),} \PYG{n}{TRUE}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+\PYG{n}{rect\PYGZus{}grid} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{matrix}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{nrow}\PYG{o}{=}\PYG{n}{nrow}\PYG{p}{(}\PYG{n}{area\PYGZus{}grid}\PYG{p}{),} \PYG{n}{ncol}\PYG{o}{=}\PYG{n}{ncol}\PYG{p}{(}\PYG{n}{area\PYGZus{}grid}\PYG{p}{))}
+\PYG{k}{for} \PYG{p}{(}\PYG{n}{row} \PYG{o+ow}{in} \PYG{n}{area\PYGZus{}vector}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+  \PYG{n}{area\PYGZus{}data} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k}{as}\PYG{o}{.}\PYG{n}{integer}\PYG{p}{(}\PYG{n}{strsplit}\PYG{p}{(}\PYG{n}{row}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)[[}\PYG{l+m+mi}{1}\PYG{p}{]])}
+  \PYG{n}{x} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{area\PYGZus{}data}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]}
+  \PYG{n}{y} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{area\PYGZus{}data}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]}
+  \PYG{n}{width} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{area\PYGZus{}data}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]}
+  \PYG{n}{height} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{area\PYGZus{}data}\PYG{p}{[}\PYG{l+m+mi}{4}\PYG{p}{]}
+  \PYG{k}{if} \PYG{p}{(}\PYG{n}{rect\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{n}{empty\PYGZus{}row} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{FALSE}
+    \PYG{n}{empty\PYGZus{}col} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{FALSE}
+    \PYG{k}{while} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{3} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{height} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{3} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{err}{!}\PYG{n}{empty\PYGZus{}row} \PYG{o}{||} \PYG{err}{!}\PYG{n}{empty\PYGZus{}col}\PYG{p}{))} \PYG{p}{\PYGZob{}}
+      \PYG{k}{if} \PYG{p}{(}\PYG{err}{!}\PYG{n}{empty\PYGZus{}row}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n+nb}{all}\PYG{p}{(}\PYG{n}{rect\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{height}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{width}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)):}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{p}{\PYGZob{}}\PYG{n}{empty\PYGZus{}row} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{\PYGZcb{}}
+        \PYG{k}{else} \PYG{p}{\PYGZob{}}\PYG{n}{height} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{height} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k}{if} \PYG{p}{(}\PYG{err}{!}\PYG{n}{empty\PYGZus{}col}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        \PYG{k}{if} \PYG{p}{(}\PYG{n+nb}{all}\PYG{p}{(}\PYG{n}{rect\PYGZus{}grid}\PYG{p}{[(}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{height}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)):}\PYG{n}{y}\PYG{p}{,} \PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{width}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{))} \PYG{p}{\PYGZob{}}\PYG{n}{empty\PYGZus{}col} \PYG{o}{=} \PYG{n}{TRUE}\PYG{p}{\PYGZcb{}}
+        \PYG{k}{else} \PYG{p}{\PYGZob{}}\PYG{n}{width} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{n}{width} \PYG{o}{\PYGZhy{}} \PYG{l+m+mi}{1}\PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k}{if} \PYG{p}{(}\PYG{n}{width} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{3} \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{n}{height} \PYG{o}{\PYGZgt{}=} \PYG{l+m+mi}{3}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      \PYG{n}{rect\PYGZus{}grid}\PYG{p}{[(}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{height}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)):}\PYG{n}{y}\PYG{p}{,} \PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{width}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)):}\PYG{n}{x}\PYG{p}{]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m+mi}{1}
+      \PYG{n}{rect\PYGZus{}grid}\PYG{p}{[(}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{height}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{):(}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{),} \PYG{p}{(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{p}{(}\PYG{n}{width}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{):(}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{)]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m+mi}{2}
+    \PYG{p}{\PYGZcb{}}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

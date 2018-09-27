@@ -1,0 +1,23 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{from} \PYG{n+nn}{PIL} \PYG{k+kn}{import} \PYG{n}{Image}
+
+\PYG{n}{img} \PYG{o}{=} \PYG{n}{Image}\PYG{o}{.}\PYG{n}{open}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}apple.jpeg\PYGZsq{}}\PYG{p}{)}                                                  \PYG{c+c1}{\PYGZsh{}LOAD IMAGE AS RGB PIXELS}
+\PYG{n}{rgb} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{convert}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}RGB\PYGZsq{}}\PYG{p}{)}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+\PYG{n}{greyscale\PYGZus{}grid} \PYG{o}{=} \PYG{p}{[]}
+\PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{img}\PYG{o}{.}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]):}                                                    \PYG{c+c1}{\PYGZsh{}LOOP THROUGH PIXELS AND CALCULATE LUMINANCE}
+    \PYG{n}{greyscale\PYGZus{}grid}\PYG{o}{.}\PYG{n}{append}\PYG{p}{([])}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n}{img}\PYG{o}{.}\PYG{n}{size}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]):}
+        \PYG{n}{r\PYGZus{}luminance} \PYG{o}{=} \PYG{n}{rgb}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]}\PYG{o}{*}\PYG{l+m+mf}{0.2126}
+        \PYG{n}{g\PYGZus{}luminance} \PYG{o}{=} \PYG{n}{rgb}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{][}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{*}\PYG{l+m+mf}{0.7152}
+        \PYG{n}{b\PYGZus{}luminance} \PYG{o}{=} \PYG{n}{rgb}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{][}\PYG{l+m+mi}{2}\PYG{p}{]}\PYG{o}{*}\PYG{l+m+mf}{0.0722}
+        \PYG{n}{luminance} \PYG{o}{=} \PYG{n+nb}{round}\PYG{p}{(}\PYG{n}{r\PYGZus{}luminance} \PYG{o}{+} \PYG{n}{g\PYGZus{}luminance} \PYG{o}{+} \PYG{n}{b\PYGZus{}luminance}\PYG{p}{)}              \PYG{c+c1}{\PYGZsh{}GREYSCALE VALUE MUST BE AN INTEGER}
+        \PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{luminance}\PYG{p}{)}
+
+\PYG{n}{display\PYGZus{}image} \PYG{o}{=} \PYG{n}{Image}\PYG{o}{.}\PYG{n}{new}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}RGB\PYGZsq{}}\PYG{p}{,(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]),}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{)))}   \PYG{c+c1}{\PYGZsh{}CREATE EMPTY IMAGE}
+\PYG{n}{pixels} \PYG{o}{=} \PYG{n}{display\PYGZus{}image}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+\PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{)):}                                            \PYG{c+c1}{\PYGZsh{}LOOP THROUGH PIXELS AND SET COLOURS}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{])):}
+        \PYG{n}{luminance} \PYG{o}{=} \PYG{n}{greyscale\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]}
+        \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{luminance}\PYG{p}{,}\PYG{n}{luminance}\PYG{p}{,}\PYG{n}{luminance}\PYG{p}{)}
+\PYG{n}{display\PYGZus{}image}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}                                                            \PYG{c+c1}{\PYGZsh{}DISPLAY GREYSCALE IMAGE}
+\end{Verbatim}

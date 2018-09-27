@@ -1,0 +1,122 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{library}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}data.table\PYGZdq{}}\PYG{p}{)}
+
+
+input \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{strsplit}\PYG{p}{(}\PYG{k+kp}{as.character}\PYG{p}{(}\PYG{k+kp}{commandArgs}\PYG{p}{(}trailingOnly \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{)),} \PYG{l+s}{\PYGZsq{} \PYGZsq{}}\PYG{p}{)[[}\PYG{l+m}{1}\PYG{p}{]]}
+\PYG{k+kp}{setwd}\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{])}
+\PYG{k+kn}{source}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}merge.r\PYGZsq{}}\PYG{p}{)}
+MAZE\PYGZus{}GRID \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{data.matrix}\PYG{p}{(}fread\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]))}
+QUIT\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} input\PYG{p}{[}\PYG{l+m}{3}\PYG{p}{]}
+UPDATE\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} input\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{]}
+RECT\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+s}{\PYGZsq{}rectangles.csv\PYGZsq{}}
+RECT\PYGZus{}SIZE \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{3}                                                                  \PYG{c+c1}{\PYGZsh{}MINIMUM DIMENSIONS OF RECTANGLE (3X3)}
+
+
+update \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}text\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                      \PYG{c+c1}{\PYGZsh{}EDIT UPDATE FILE}
+  check\PYGZus{}quit\PYG{p}{()}
+  f \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{file}\PYG{p}{(}UPDATE\PYGZus{}FILE\PYG{p}{)}
+  \PYG{k+kp}{writeLines}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}text\PYG{p}{),} f\PYG{p}{)}
+  \PYG{k+kp}{close}\PYG{p}{(}f\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+check\PYGZus{}quit \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}                                                      \PYG{c+c1}{\PYGZsh{}CHECK TO SEE IF QUITTING}
+  status \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{readChar}\PYG{p}{(}QUIT\PYGZus{}FILE\PYG{p}{,} \PYG{k+kp}{file.info}\PYG{p}{(}QUIT\PYGZus{}FILE\PYG{p}{)}\PYG{o}{\PYGZdl{}}size\PYG{p}{)}
+  \PYG{k+kr}{if} \PYG{p}{(}status \PYG{o}{==} \PYG{l+s}{\PYGZsq{}q\PYGZsq{}}\PYG{p}{)} \PYG{p}{\PYGZob{}}\PYG{k+kp}{stop}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}quit\PYGZsq{}}\PYG{p}{)\PYGZcb{}}                                             \PYG{c+c1}{\PYGZsh{}STOP PROGRAM}
+\PYG{p}{\PYGZcb{}}
+
+
+main \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                   \PYG{c+c1}{\PYGZsh{}FUNCTION PACKED TO CATCH ERRORS}
+  height\PYGZus{}above \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{,} y\PYG{p}{)} \PYG{p}{\PYGZob{}}                                              \PYG{c+c1}{\PYGZsh{}STOPS REPEATED CALCULATION OF SAME VALUES}
+    \PYG{k+kr}{if} \PYG{p}{(}y \PYG{o}{==} \PYG{l+m}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Finding free space\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}x\PYG{o}{/}\PYG{k+kp}{ncol}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))\PYGZcb{}}
+    pos \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{tail}\PYG{p}{(}\PYG{k+kp}{which}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{[}\PYG{l+m}{1}\PYG{o}{:}y\PYG{p}{,} x\PYG{p}{]} \PYG{o}{==} \PYG{l+m}{1}\PYG{p}{),} \PYG{l+m}{1}\PYG{p}{)[}\PYG{l+m}{1}\PYG{p}{]}                            \PYG{c+c1}{\PYGZsh{}ONLY NEED TO FIND EACH HEIGHT ONCE}
+    \PYG{k+kr}{if} \PYG{p}{(}\PYG{k+kp}{is.na}\PYG{p}{(}pos\PYG{p}{))} \PYG{p}{\PYGZob{}}\PYG{k+kr}{return}\PYG{p}{(}y\PYG{p}{)\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}y \PYG{o}{\PYGZhy{}} pos\PYG{p}{)}
+  \PYG{p}{\PYGZcb{}}
+                                                                                \PYG{c+c1}{\PYGZsh{}AMOUNT OF EMPTY SPACE ABOVE EACH POINT}
+  height\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{matrix}\PYG{p}{(}\PYG{k+kp}{mapply}\PYG{p}{(}height\PYGZus{}above\PYG{p}{,} \PYG{k+kp}{col}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{),} \PYG{k+kp}{row}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)),} nrow\PYG{o}{=}\PYG{k+kp}{nrow}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{))}
+
+  max\PYGZus{}area \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{,} y\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                  \PYG{c+c1}{\PYGZsh{}GETS MAX RECT THAT CAN BE DRAWN FROM POINT}
+    \PYG{k+kr}{if} \PYG{p}{(}y \PYG{o}{==} \PYG{l+m}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Calculating areas\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}x\PYG{o}{/}\PYG{k+kp}{ncol}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))\PYGZcb{}}
+    width \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}
+    height \PYG{o}{\PYGZlt{}\PYGZhy{}} height\PYGZus{}grid\PYG{p}{[}y\PYG{p}{,} x\PYG{p}{]}
+    max\PYGZus{}width \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{0}
+    max\PYGZus{}height \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{0}
+    \PYG{k+kr}{while} \PYG{p}{(}height \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE \PYG{o}{\PYGZam{}\PYGZam{}} x \PYG{o}{\PYGZhy{}} \PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)} \PYG{o}{\PYGZgt{}=} \PYG{l+m}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}                         \PYG{c+c1}{\PYGZsh{}LOOP THROUGH VALID RECTANGLES}
+      \PYG{k+kr}{if} \PYG{p}{(}height\PYGZus{}grid\PYG{p}{[}y\PYG{p}{,} x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]} \PYG{o}{\PYGZlt{}} height\PYG{p}{)} \PYG{p}{\PYGZob{}}                               \PYG{c+c1}{\PYGZsh{}REDUCE HEIGHT TO MATCH CURRENT HEIGHT}
+        height \PYG{o}{\PYGZlt{}\PYGZhy{}} height\PYGZus{}grid\PYG{p}{[}y\PYG{p}{,} x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k+kr}{if} \PYG{p}{(}width\PYG{o}{*}height \PYG{o}{\PYGZgt{}} max\PYGZus{}width\PYG{o}{*}max\PYGZus{}height \PYG{o}{\PYGZam{}\PYGZam{}} width \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE \PYG{o}{\PYGZam{}\PYGZam{}} height \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE\PYG{p}{)} \PYG{p}{\PYGZob{}}
+        max\PYGZus{}width \PYG{o}{\PYGZlt{}\PYGZhy{}} width                                                      \PYG{c+c1}{\PYGZsh{}NEW MAX RECT FOUND}
+        max\PYGZus{}height \PYG{o}{\PYGZlt{}\PYGZhy{}} height
+      \PYG{p}{\PYGZcb{}}
+      width \PYG{o}{\PYGZlt{}\PYGZhy{}} width \PYG{o}{+} \PYG{l+m}{1}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}max\PYGZus{}width\PYG{p}{,} max\PYGZus{}height\PYG{p}{,} sep\PYG{o}{=}\PYG{l+s}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{))}                               \PYG{c+c1}{\PYGZsh{}RETURN RECT DATA}
+  \PYG{p}{\PYGZcb{}}
+                                                                                \PYG{c+c1}{\PYGZsh{}MAX RECT THAT CAN BE DRAWN FROM EACH POINT}
+  area\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{matrix}\PYG{p}{(}\PYG{k+kp}{mapply}\PYG{p}{(}max\PYGZus{}area\PYG{p}{,} \PYG{k+kp}{col}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{),} \PYG{k+kp}{row}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)),} nrow\PYG{o}{=}\PYG{k+kp}{nrow}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{))}
+
+  create\PYGZus{}vector \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{,} y\PYG{p}{)} \PYG{p}{\PYGZob{}}                                             \PYG{c+c1}{\PYGZsh{}ADDS POSITION TO RECT DATA}
+    data \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{as.integer}\PYG{p}{(}\PYG{k+kp}{strsplit}\PYG{p}{(}area\PYGZus{}grid\PYG{p}{[}y\PYG{p}{,} x\PYG{p}{],} \PYG{l+s}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)[[}\PYG{l+m}{1}\PYG{p}{]])}
+    \PYG{k+kr}{if} \PYG{p}{(}data\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}\PYG{o}{*}data\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]} \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                  \PYG{c+c1}{\PYGZsh{}ONLY ADD RECTANGLES WITH ANY AREA}
+      \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}x\PYG{p}{,} y\PYG{p}{,} data\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{],} data\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{],} sep\PYG{o}{=}\PYG{l+s}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{))}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kc}{NA}\PYG{p}{)}
+  \PYG{p}{\PYGZcb{}}
+
+  area\PYGZus{}vector \PYG{o}{\PYGZlt{}\PYGZhy{}} na.omit\PYG{p}{(}\PYG{k+kp}{mapply}\PYG{p}{(}create\PYGZus{}vector\PYG{p}{,} \PYG{k+kp}{col}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{),} \PYG{k+kp}{row}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)))} \PYG{c+c1}{\PYGZsh{}VECTOR OR RECT DATA}
+  \PYG{k+kr}{if} \PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}area\PYGZus{}vector\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    area\PYGZus{}vector \PYG{o}{\PYGZlt{}\PYGZhy{}} merge\PYGZus{}sort\PYG{p}{(}na.omit\PYG{p}{(}area\PYGZus{}vector\PYG{p}{),} \PYG{k+kc}{TRUE}\PYG{p}{)}                       \PYG{c+c1}{\PYGZsh{}SORT SO LARGEST AREAS EXPLORED FIRST}
+    check\PYGZus{}quit\PYG{p}{()}
+  \PYG{p}{\PYGZcb{}}
+
+  expand\PYGZus{}area \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}data\PYG{p}{,} grid\PYG{p}{)} \PYG{p}{\PYGZob{}}                                         \PYG{c+c1}{\PYGZsh{}ADD EACH RECT TO RECT GRID}
+    x \PYG{o}{\PYGZlt{}\PYGZhy{}} data\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]}
+    y \PYG{o}{\PYGZlt{}\PYGZhy{}} data\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]}
+    width \PYG{o}{\PYGZlt{}\PYGZhy{}} data\PYG{p}{[}\PYG{l+m}{3}\PYG{p}{]}
+    height \PYG{o}{\PYGZlt{}\PYGZhy{}} data\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{]}
+    row\PYGZus{}clear \PYG{o}{=} \PYG{k+kc}{FALSE}
+    col\PYGZus{}clear \PYG{o}{=} \PYG{k+kc}{FALSE}
+    \PYG{k+kr}{while} \PYG{p}{(}width \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE \PYG{o}{\PYGZam{}\PYGZam{}} height \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE \PYG{o}{\PYGZam{}\PYGZam{}} \PYG{p}{(}\PYG{o}{!}row\PYGZus{}clear \PYG{o}{||} \PYG{o}{!}col\PYGZus{}clear\PYG{p}{))} \PYG{p}{\PYGZob{}}\PYG{c+c1}{\PYGZsh{}REMOVE OVERLAPS}
+      \PYG{k+kr}{if} \PYG{p}{(}\PYG{o}{!}row\PYGZus{}clear\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                         \PYG{c+c1}{\PYGZsh{}TRIM ROWS}
+        \PYG{k+kr}{if} \PYG{p}{(}\PYG{k+kp}{all}\PYG{p}{(}grid\PYG{p}{[}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} \PYG{p}{(}x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{))}\PYG{o}{:}x\PYG{p}{]} \PYG{o}{==} \PYG{l+m}{0}\PYG{p}{))} \PYG{p}{\PYGZob{}}row\PYGZus{}clear \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{\PYGZcb{}}
+        \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}height \PYG{o}{\PYGZlt{}\PYGZhy{}} height \PYG{o}{\PYGZhy{}} \PYG{l+m}{1}\PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+      \PYG{k+kr}{if} \PYG{p}{(}\PYG{o}{!}col\PYGZus{}clear\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                         \PYG{c+c1}{\PYGZsh{}TRIM COLS}
+        \PYG{k+kr}{if} \PYG{p}{(}\PYG{k+kp}{all}\PYG{p}{(}grid\PYG{p}{[(}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{))}\PYG{o}{:}y\PYG{p}{,} x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]} \PYG{o}{==} \PYG{l+m}{0}\PYG{p}{))} \PYG{p}{\PYGZob{}}col\PYGZus{}clear \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{\PYGZcb{}}
+        \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}width \PYG{o}{\PYGZlt{}\PYGZhy{}} width \PYG{o}{\PYGZhy{}} \PYG{l+m}{1}\PYG{p}{\PYGZcb{}}
+      \PYG{p}{\PYGZcb{}}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{if} \PYG{p}{(}width \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE \PYG{o}{\PYGZam{}\PYGZam{}} height \PYG{o}{\PYGZgt{}=} RECT\PYGZus{}SIZE\PYG{p}{)} \PYG{p}{\PYGZob{}}                            \PYG{c+c1}{\PYGZsh{}IF RECTANGLE STILL LARGE ENOUGH}
+      grid\PYG{p}{[(}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)),} \PYG{p}{(}x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{))}\PYG{o}{:}x\PYG{p}{]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}                                \PYG{c+c1}{\PYGZsh{}SET PERIMETER TO 1\PYGZsq{}S}
+      grid\PYG{p}{[}y\PYG{p}{,} \PYG{p}{(}x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{))}\PYG{o}{:}x\PYG{p}{]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}
+      grid\PYG{p}{[(}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)}\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}y\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}
+      grid\PYG{p}{[(}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)}\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}y\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} x\PYG{p}{]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}
+      grid\PYG{p}{[(}y\PYG{o}{\PYGZhy{}}\PYG{p}{(}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)}\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}y\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} \PYG{p}{(}x\PYG{o}{\PYGZhy{}}\PYG{p}{(}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)}\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}x\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{2}                  \PYG{c+c1}{\PYGZsh{}SET CENTER TO 2\PYGZsq{}S}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}grid\PYG{p}{)}
+  \PYG{p}{\PYGZcb{}}
+
+  \PYG{k+kt}{c} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}
+  rect\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{matrix}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,} nrow\PYG{o}{=}\PYG{k+kp}{nrow}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{),} ncol\PYG{o}{=}\PYG{k+kp}{ncol}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{))}            \PYG{c+c1}{\PYGZsh{}CREATE EMPTY RECT GRID}
+  \PYG{k+kr}{for} \PYG{p}{(}row \PYG{k+kr}{in} area\PYGZus{}vector\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Finding rectangles\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}\PYG{k+kt}{c}\PYG{o}{/}\PYG{k+kp}{length}\PYG{p}{(}area\PYGZus{}vector\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))}
+    area\PYGZus{}data \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{as.integer}\PYG{p}{(}\PYG{k+kp}{strsplit}\PYG{p}{(}\PYG{k+kp}{row}\PYG{p}{,} \PYG{l+s}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)[[}\PYG{l+m}{1}\PYG{p}{]])}
+    \PYG{k+kr}{if} \PYG{p}{(}rect\PYGZus{}grid\PYG{p}{[}area\PYGZus{}data\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{],} area\PYGZus{}data\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{]]} \PYG{o}{==} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}                           \PYG{c+c1}{\PYGZsh{}IF NOT PART OF RECT ALREADY}
+      rect\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} expand\PYGZus{}area\PYG{p}{(}area\PYGZus{}data\PYG{p}{,} rect\PYGZus{}grid\PYG{p}{)}
+    \PYG{p}{\PYGZcb{}}
+    \PYG{k+kt}{c} \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c} \PYG{o}{+} \PYG{l+m}{1}
+  \PYG{p}{\PYGZcb{}}
+
+  write.table\PYG{p}{(}rect\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} RECT\PYGZus{}FILE\PYG{p}{,}row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+  \PYG{k+kr}{return}\PYG{p}{(}RECT\PYGZus{}FILE\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+output \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{tryCatch}\PYG{p}{(}                                                             \PYG{c+c1}{\PYGZsh{}CATCH QUIT ERRORS}
+  \PYG{p}{\PYGZob{}}main\PYG{p}{(}MAZE\PYGZus{}GRID\PYG{p}{)\PYGZcb{},}
+  error\PYG{o}{=}\PYG{k+kr}{function}\PYG{p}{(}cond\PYG{p}{)} \PYG{p}{\PYGZob{}}\PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kp}{geterrmessage}\PYG{p}{())\PYGZcb{}}
+\PYG{p}{)}
+\PYG{k+kp}{cat}\PYG{p}{(}output\PYG{p}{)}                                                                     \PYG{c+c1}{\PYGZsh{}RETURN OUTPUT TO PYTHON}
+\end{Verbatim}

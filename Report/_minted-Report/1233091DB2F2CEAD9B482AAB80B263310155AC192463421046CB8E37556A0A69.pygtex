@@ -1,0 +1,43 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{generate\PYGZus{}nodes}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{):}                                                   \PYG{c+c1}{\PYGZsh{}FINDS NODES USING R MODULES}
+    \PYG{n}{directory} \PYG{o}{=} \PYG{n}{os}\PYG{o}{.}\PYG{n}{getcwd}\PYG{p}{()}
+    \PYG{n}{cmd\PYGZus{}path} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}/usr/local/bin/Rscript\PYGZsq{}}
+    \PYG{n}{input\PYGZus{}text} \PYG{o}{=} \PYG{n}{directory} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{maze\PYGZus{}csv\PYGZus{}name} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n}{update}\PYG{o}{.}\PYG{n}{get\PYGZus{}quit\PYGZus{}file}\PYG{p}{()} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n}{update}\PYG{o}{.}\PYG{n}{get\PYGZus{}update\PYGZus{}file}\PYG{p}{()}
+    \PYG{n}{script\PYGZus{}path} \PYG{o}{=} \PYG{n}{directory} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/rectangles.r\PYGZsq{}}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rectilinear}\PYG{p}{:}                                                \PYG{c+c1}{\PYGZsh{}USE RSR TO REDUCE NODE AMOUNTS FOR NON\PYGZhy{}RECTILINEAR}
+        \PYG{n}{rect\PYGZus{}csv\PYGZus{}file} \PYG{o}{=} \PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{check\PYGZus{}output}\PYG{p}{([}\PYG{n}{cmd\PYGZus{}path}\PYG{p}{,} \PYG{n}{script\PYGZus{}path}\PYG{p}{,} \PYG{n}{input\PYGZus{}text}\PYG{p}{],} \PYG{n}{universal\PYGZus{}newlines}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+        \PYG{k}{if} \PYG{n}{rect\PYGZus{}csv\PYGZus{}file} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}quit\PYGZsq{}}\PYG{p}{:}
+            \PYG{k}{raise} \PYG{n}{update}\PYG{o}{.}\PYG{n}{Quit}
+
+    \PYG{n}{input\PYGZus{}text} \PYG{o}{+=} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rectilinear}\PYG{p}{)}
+    \PYG{n}{script\PYGZus{}path} \PYG{o}{=} \PYG{n}{directory} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}/nodes.r\PYGZsq{}}
+    \PYG{k}{for} \PYG{n}{point} \PYG{o+ow}{in} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{end\PYGZus{}points} \PYG{p}{:} \PYG{n}{input\PYGZus{}text} \PYG{o}{+=} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{point}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{)}         \PYG{c+c1}{\PYGZsh{}INCREMENT INDEXES AS R STARTS AT 1 NOT 0}
+    \PYG{k}{if} \PYG{o+ow}{not} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rectilinear} \PYG{p}{:} \PYG{n}{input\PYGZus{}text} \PYG{o}{+=} \PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}} \PYG{o}{+} \PYG{n}{rect\PYGZus{}csv\PYGZus{}file}
+                                                                            \PYG{c+c1}{\PYGZsh{}CALL R PROGRAM AND WAIT FOR OUTPUT}
+    \PYG{n}{data} \PYG{o}{=} \PYG{n}{subprocess}\PYG{o}{.}\PYG{n}{check\PYGZus{}output}\PYG{p}{([}\PYG{n}{cmd\PYGZus{}path}\PYG{p}{,} \PYG{n}{script\PYGZus{}path}\PYG{p}{,} \PYG{n}{input\PYGZus{}text}\PYG{p}{],} \PYG{n}{universal\PYGZus{}newlines}\PYG{o}{=}\PYG{n+nb+bp}{True}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{data} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}quit\PYGZsq{}}\PYG{p}{:}                                                      \PYG{c+c1}{\PYGZsh{}QUIT IF R PROGRAM HAS BEEN QUIT}
+        \PYG{k}{raise} \PYG{n}{update}\PYG{o}{.}\PYG{n}{Quit}
+    \PYG{n}{nodes\PYGZus{}grid} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{n}{data}\PYG{p}{)}
+    \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes} \PYG{o}{=} \PYG{n}{structures}\PYG{o}{.}\PYG{n}{Hash\PYGZus{}Table}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{nodes\PYGZus{}grid}\PYG{p}{))}                     \PYG{c+c1}{\PYGZsh{}HASH TABLE OF NODES AND NEIGHBOURS}
+    \PYG{n}{img} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{display\PYGZus{}maze}\PYG{p}{()}                                               \PYG{c+c1}{\PYGZsh{}MAZE IMAGE FOR DISPLAY}
+    \PYG{n}{pixels} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+    \PYG{n}{draw} \PYG{o}{=} \PYG{n}{ImageDraw}\PYG{o}{.}\PYG{n}{Draw}\PYG{p}{(}\PYG{n}{img}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{node} \PYG{o+ow}{in} \PYG{n}{nodes\PYGZus{}grid}\PYG{p}{:}                                                 \PYG{c+c1}{\PYGZsh{}JOIN NODES TOGETHER IN BOTH DIRECTIONS}
+        \PYG{n}{node\PYGZus{}id} \PYG{o}{=} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+        \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{node\PYGZus{}id}\PYG{p}{]} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{k}{if} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{]} \PYG{o}{!=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{:}
+            \PYG{n}{nbr\PYGZus{}id} \PYG{o}{=} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{])} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{node\PYGZus{}id}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{nbr\PYGZus{}id}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{nbr\PYGZus{}id}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{node\PYGZus{}id}\PYG{p}{)}
+            \PYG{n}{draw}\PYG{o}{.}\PYG{n}{line}\PYG{p}{((}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]),} \PYG{n}{fill}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}DRAW EDGES ON IMAGE}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}                           \PYG{c+c1}{\PYGZsh{}DRAW NODES ON IMAGE}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{],}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}                           \PYG{c+c1}{\PYGZsh{}DRAW NODES ON IMAGE}
+        \PYG{k}{if} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]} \PYG{o}{!=} \PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{:}
+            \PYG{n}{nbr\PYGZus{}id} \PYG{o}{=} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}} \PYG{o}{+} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{])}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{node\PYGZus{}id}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{nbr\PYGZus{}id}\PYG{p}{)}
+            \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{nodes}\PYG{p}{[}\PYG{n}{nbr\PYGZus{}id}\PYG{p}{]}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{node\PYGZus{}id}\PYG{p}{)}
+            \PYG{n}{draw}\PYG{o}{.}\PYG{n}{line}\PYG{p}{((}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]),} \PYG{n}{fill}\PYG{o}{=}\PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{))} \PYG{c+c1}{\PYGZsh{}DRAW EDGES ON IMAGE}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}                           \PYG{c+c1}{\PYGZsh{}DRAW NODES ON IMAGE}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{]]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}                           \PYG{c+c1}{\PYGZsh{}DRAW NODES ON IMAGE}
+    \PYG{n}{img}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

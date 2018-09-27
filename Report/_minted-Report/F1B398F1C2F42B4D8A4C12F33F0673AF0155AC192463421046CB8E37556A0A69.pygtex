@@ -1,0 +1,16 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{display\PYGZus{}nodes}\PYG{p}{():}
+    \PYG{n}{maze\PYGZus{}grid} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}maze.csv\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{nodes\PYGZus{}grid} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}nodes.csv\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{img} \PYG{o}{=} \PYG{n}{PIL}\PYG{o}{.}\PYG{n}{new}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}RGB\PYGZsq{}}\PYG{p}{,(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{maze\PYGZus{}grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]),}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{maze\PYGZus{}grid}\PYG{p}{)))}
+    \PYG{n}{pixels} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+    \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{maze\PYGZus{}grid}\PYG{p}{)):}
+        \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{maze\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{])):}
+            \PYG{k}{if} \PYG{n}{maze\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{node} \PYG{o+ow}{in} \PYG{n}{nodes\PYGZus{}grid}\PYG{p}{:}
+        \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{],} \PYG{n}{node}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{]]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{img}
+\end{Verbatim}

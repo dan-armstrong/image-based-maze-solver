@@ -1,0 +1,25 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{n}{name}\PYG{p}{):}                                                    \PYG{c+c1}{\PYGZsh{}RETURNS CSV AS A 2D GRID OF INTEGERS}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{name}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{csv} \PYG{o}{=} \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{read}\PYG{p}{()}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{n}{csv\PYGZus{}rows} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{grid} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{csv\PYGZus{}row} \PYG{o+ow}{in} \PYG{n}{csv\PYGZus{}rows}\PYG{p}{:}                                                    \PYG{c+c1}{\PYGZsh{}LOOP THROUGH FILE ROWS}
+        \PYG{n}{grid\PYGZus{}row} \PYG{o}{=} \PYG{p}{[]}
+        \PYG{n}{csv\PYGZus{}row} \PYG{o}{=} \PYG{n}{csv\PYGZus{}row}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{},\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{for} \PYG{n}{item} \PYG{o+ow}{in} \PYG{n}{csv\PYGZus{}row}\PYG{p}{:}
+            \PYG{k}{try} \PYG{p}{:} \PYG{n}{grid\PYGZus{}row}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{item}\PYG{p}{))}                                    \PYG{c+c1}{\PYGZsh{}IGNORE NON\PYGZhy{}INTEGERS}
+            \PYG{k}{except} \PYG{p}{:} \PYG{k}{pass}
+        \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid\PYGZus{}row}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{p}{:} \PYG{n}{grid}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{grid\PYGZus{}row}\PYG{p}{)}                            \PYG{c+c1}{\PYGZsh{}IGNORE EMPTY ROWS}
+    \PYG{k}{return} \PYG{n}{grid}
+
+
+\PYG{k}{def} \PYG{n+nf}{save\PYGZus{}grid}\PYG{p}{(}\PYG{n}{name}\PYG{p}{,} \PYG{n}{grid}\PYG{p}{):}                                                      \PYG{c+c1}{\PYGZsh{}SAVES 2D GRID AS CSV}
+    \PYG{n}{csv\PYGZus{}string} \PYG{o}{=} \PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}
+    \PYG{k}{for} \PYG{n}{row} \PYG{o+ow}{in} \PYG{n}{grid}\PYG{p}{:}
+        \PYG{n}{csv\PYGZus{}string} \PYG{o}{+=} \PYG{n+nb}{str}\PYG{p}{(}\PYG{n}{row}\PYG{p}{)[}\PYG{l+m+mi}{1}\PYG{p}{:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{} \PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)} \PYG{o}{+} \PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}                     \PYG{c+c1}{\PYGZsh{}REMOVE BRACKETS AND SPACES FROM LIST}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{name}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)}                                                      \PYG{c+c1}{\PYGZsh{}[\PYGZca{}CONTINUED\PYGZca{}] TO FORMAT THE SAME AS CSV}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{csv\PYGZus{}string}\PYG{p}{[:}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+\end{Verbatim}

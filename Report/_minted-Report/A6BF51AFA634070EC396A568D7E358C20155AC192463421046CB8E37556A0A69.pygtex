@@ -1,0 +1,6 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{h}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{,} \PYG{n}{end}\PYG{p}{):}                                                           \PYG{c+c1}{\PYGZsh{}RETURNS MANHATTAN DISTANCE BETWEEN NODE + END}
+    \PYG{k}{if} \PYG{n}{end} \PYG{o}{==} \PYG{n+nb+bp}{None} \PYG{p}{:} \PYG{k}{return} \PYG{l+m+mi}{0}
+    \PYG{k}{print}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}h(n)\PYGZsq{}}\PYG{p}{,} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{id}\PYG{p}{,} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{()} \PYG{o}{\PYGZhy{}} \PYG{n}{end}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{())} \PYG{o}{+} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{()} \PYG{o}{\PYGZhy{}} \PYG{n}{end}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{()))}
+    \PYG{k}{return} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{()} \PYG{o}{\PYGZhy{}} \PYG{n}{end}\PYG{o}{.}\PYG{n}{get\PYGZus{}x}\PYG{p}{())} \PYG{o}{+} \PYG{n+nb}{abs}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{()} \PYG{o}{\PYGZhy{}} \PYG{n}{end}\PYG{o}{.}\PYG{n}{get\PYGZus{}y}\PYG{p}{())}
+\end{Verbatim}

@@ -1,0 +1,35 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{merge}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{,} \PYG{n}{list\PYGZus{}b}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{):}                                          \PYG{c+c1}{\PYGZsh{}MERGES TWO LISTS TOGETHER}
+    \PYG{n}{pointer\PYGZus{}a} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{pointer\PYGZus{}b} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{n}{merged} \PYG{o}{=} \PYG{p}{[]}
+
+    \PYG{k}{while} \PYG{p}{(}\PYG{n}{pointer\PYGZus{}a} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{))} \PYG{o}{\PYGZam{}} \PYG{p}{(}\PYG{n}{pointer\PYGZus{}b} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{)):}                \PYG{c+c1}{\PYGZsh{}WHILE BOTH LISTS NOT EMPTY}
+        \PYG{k}{if} \PYG{n}{value}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}a}\PYG{p}{],} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{)} \PYG{o}{\PYGZlt{}} \PYG{n}{value}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}b}\PYG{p}{],} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{):}
+            \PYG{n}{merged}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}a}\PYG{p}{])}                                    \PYG{c+c1}{\PYGZsh{}ADD FROM A IF SMALLER THAN B (OR MORE NEGATIVE)}
+            \PYG{n}{pointer\PYGZus{}a} \PYG{o}{+=} \PYG{l+m+mi}{1}
+        \PYG{k}{else}\PYG{p}{:}
+            \PYG{n}{merged}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}b}\PYG{p}{])}
+            \PYG{n}{pointer\PYGZus{}b} \PYG{o}{+=} \PYG{l+m+mi}{1}
+
+    \PYG{k}{if} \PYG{n}{pointer\PYGZus{}a} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{):}                                                 \PYG{c+c1}{\PYGZsh{}ADD REMNANTS}
+        \PYG{n}{merged} \PYG{o}{+=} \PYG{n}{list\PYGZus{}a}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}a}\PYG{p}{:]}
+    \PYG{k}{elif} \PYG{n}{pointer\PYGZus{}b} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{):}
+        \PYG{n}{merged} \PYG{o}{+=} \PYG{n}{list\PYGZus{}b}\PYG{p}{[}\PYG{n}{pointer\PYGZus{}b}\PYG{p}{:]}
+    \PYG{k}{return} \PYG{n}{merged}
+
+\PYG{k}{def} \PYG{n+nf}{sort}\PYG{p}{(}\PYG{n}{main\PYGZus{}list}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas} \PYG{o}{=} \PYG{n+nb+bp}{False}\PYG{p}{):}                                        \PYG{c+c1}{\PYGZsh{}SORT LIST USING MERGE SORT}
+    \PYG{n}{list\PYGZus{}a} \PYG{o}{=} \PYG{n}{main\PYGZus{}list}\PYG{p}{[:}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{main\PYGZus{}list}\PYG{p}{)}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{]}
+    \PYG{n}{list\PYGZus{}b} \PYG{o}{=} \PYG{n}{main\PYGZus{}list}\PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{main\PYGZus{}list}\PYG{p}{)}\PYG{o}{//}\PYG{l+m+mi}{2}\PYG{p}{:]}
+    \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+        \PYG{n}{list\PYGZus{}a} \PYG{o}{=} \PYG{n}{sort}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{1}\PYG{p}{:}
+        \PYG{n}{list\PYGZus{}b} \PYG{o}{=} \PYG{n}{sort}\PYG{p}{(}\PYG{n}{list\PYGZus{}b}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{merge}\PYG{p}{(}\PYG{n}{list\PYGZus{}a}\PYG{p}{,} \PYG{n}{list\PYGZus{}b}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{)}
+
+\PYG{k}{def} \PYG{n+nf}{value}\PYG{p}{(}\PYG{n}{item}\PYG{p}{,} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{):}                                                    \PYG{c+c1}{\PYGZsh{}RETURNS VALUE THAT ITEMS ARE ORDERED BY}
+    \PYG{k}{if} \PYG{n}{sort\PYGZus{}areas}\PYG{p}{:}
+        \PYG{n}{data} \PYG{o}{=} \PYG{n}{item}\PYG{o}{.}\PYG{n}{split}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZhy{}\PYGZsq{}}\PYG{p}{)}
+        \PYG{k}{return} \PYG{o}{\PYGZhy{}}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{])}\PYG{o}{*}\PYG{n+nb}{int}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{3}\PYG{p}{])}                                       \PYG{c+c1}{\PYGZsh{}WANT TO ORDER BY LARGEST NOT SMALLEST SO MAKE NEGATIVE}
+    \PYG{k}{return} \PYG{n}{item}                                                                 \PYG{c+c1}{\PYGZsh{}WANT TO ORDER BY SMALLEST SO LEAVE AS IS}
+\end{Verbatim}

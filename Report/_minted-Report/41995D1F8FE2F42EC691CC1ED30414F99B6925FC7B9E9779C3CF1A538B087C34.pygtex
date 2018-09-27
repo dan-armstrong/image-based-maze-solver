@@ -1,0 +1,194 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k+kn}{library}\PYG{p}{(}\PYG{l+s}{\PYGZdq{}data.table\PYGZdq{}}\PYG{p}{)}                                                           \PYG{c+c1}{\PYGZsh{}PACKAGES}
+
+
+input \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{strsplit}\PYG{p}{(}\PYG{k+kp}{as.character}\PYG{p}{(}\PYG{k+kp}{commandArgs}\PYG{p}{(}trailingOnly \PYG{o}{=} \PYG{k+kc}{TRUE}\PYG{p}{)),} \PYG{l+s}{\PYGZsq{} \PYGZsq{}}\PYG{p}{)[[}\PYG{l+m}{1}\PYG{p}{]]}     \PYG{c+c1}{\PYGZsh{}GET INPUT FROM PYTHON}
+\PYG{k+kp}{setwd}\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{])}                                                                 \PYG{c+c1}{\PYGZsh{}SET CURRENT WORKING DIRECTORY}
+\PYG{k+kn}{source}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}merge.r\PYGZsq{}}\PYG{p}{)}
+GREYSCALE\PYGZus{}GRID \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{data.matrix}\PYG{p}{(}fread\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{]))}                                  \PYG{c+c1}{\PYGZsh{}SET GLOBAL CONSTANTS}
+QUIT\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} input\PYG{p}{[}\PYG{l+m}{3}\PYG{p}{]}
+UPDATE\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} input\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{]}
+RECTILINEAR \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{5}\PYG{p}{]} \PYG{o}{==} \PYG{l+s}{\PYGZsq{}True\PYGZsq{}}\PYG{p}{,} \PYG{k+kc}{TRUE}\PYG{p}{,} \PYG{k+kc}{FALSE}\PYG{p}{)}
+INVERTED \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}input\PYG{p}{[}\PYG{l+m}{6}\PYG{p}{]} \PYG{o}{==} \PYG{l+s}{\PYGZsq{}True\PYGZsq{}}\PYG{p}{,} \PYG{k+kc}{TRUE}\PYG{p}{,} \PYG{k+kc}{FALSE}\PYG{p}{)}
+WALL\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+s}{\PYGZsq{}walls.csv\PYGZsq{}}
+MAZE\PYGZus{}FILE \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+s}{\PYGZsq{}maze.csv\PYGZsq{}}
+
+
+main \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}                                                            \PYG{c+c1}{\PYGZsh{}MAIN FUNCTION GROUPED FOR ERROR CHECKING}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Loading Greyscale\PYGZsq{}}\PYG{p}{)}
+  threshold\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} threshold\PYG{p}{(}GREYSCALE\PYGZus{}GRID\PYG{p}{)}
+  \PYG{k+kr}{if} \PYG{p}{(}RECTILINEAR\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                            \PYG{c+c1}{\PYGZsh{}SAVE MAZE GRID IF RECTILINEAR}
+    structure\PYGZus{}matrix \PYG{o}{\PYGZlt{}\PYGZhy{}} wall\PYGZus{}data\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)}
+    maze\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} maze\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} structure\PYGZus{}matrix\PYG{p}{)}
+    update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Saving Maze\PYGZsq{}}\PYG{p}{)}
+    write.table\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{3}\PYG{o}{:}\PYG{l+m}{2}\PYG{p}{]}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{,} file \PYG{o}{=} WALL\PYGZus{}FILE\PYG{p}{,}                     \PYG{c+c1}{\PYGZsh{}\PYGZhy{}1 FOR INDEXING BETWEEN R (1) \PYGZam{} PYTHON (0)}
+                row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}                 \PYG{c+c1}{\PYGZsh{}3:2 SO X IS PRINTED BEFORE Y}
+    write.table\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} MAZE\PYGZus{}FILE\PYG{p}{,}
+                row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+    cell\PYGZus{}size \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{],}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{3}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]))}           \PYG{c+c1}{\PYGZsh{}AVERAGE DISTANCE BETWEEN WALLS}
+    wall\PYGZus{}size \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{],}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]))}           \PYG{c+c1}{\PYGZsh{}AVERAGE WIDTH OF WALLS}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}WALL\PYGZus{}FILE\PYG{p}{,} MAZE\PYGZus{}FILE\PYG{p}{,} cell\PYGZus{}size\PYG{p}{,} wall\PYGZus{}size\PYG{p}{))}
+  \PYG{p}{\PYGZcb{}}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Saving Maze\PYGZsq{}}\PYG{p}{)}                                                         \PYG{c+c1}{\PYGZsh{}SAVE THRESHOLD GRID IF NON\PYGZhy{}RECTILINEAR}
+  write.table\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} MAZE\PYGZus{}FILE\PYG{p}{,}row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+  \PYG{k+kr}{return}\PYG{p}{(}MAZE\PYGZus{}FILE\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+update \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}text\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                      \PYG{c+c1}{\PYGZsh{}EDIT UPDATE FILE}
+  check\PYGZus{}quit\PYG{p}{()}
+  f \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{file}\PYG{p}{(}UPDATE\PYGZus{}FILE\PYG{p}{)}
+  \PYG{k+kp}{writeLines}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}text\PYG{p}{),} f\PYG{p}{)}
+  \PYG{k+kp}{close}\PYG{p}{(}f\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+check\PYGZus{}quit \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}                                                      \PYG{c+c1}{\PYGZsh{}CHECK TO SEE IF QUITTING}
+  status \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{readChar}\PYG{p}{(}QUIT\PYGZus{}FILE\PYG{p}{,} \PYG{k+kp}{file.info}\PYG{p}{(}QUIT\PYGZus{}FILE\PYG{p}{)}\PYG{o}{\PYGZdl{}}size\PYG{p}{)}
+  \PYG{k+kr}{if} \PYG{p}{(}status \PYG{o}{==} \PYG{l+s}{\PYGZsq{}q\PYGZsq{}}\PYG{p}{)} \PYG{p}{\PYGZob{}}\PYG{k+kp}{stop}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}quit\PYGZsq{}}\PYG{p}{)\PYGZcb{}}                                             \PYG{c+c1}{\PYGZsh{}STOP PROGRAM}
+\PYG{p}{\PYGZcb{}}
+
+
+threshold\PYGZus{}value \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}hist\PYG{p}{)} \PYG{p}{\PYGZob{}}                                             \PYG{c+c1}{\PYGZsh{}CALCULATE T\PYGZhy{}VALUE FOR HISTOGRAM USING OTSU\PYGZsq{}S METHOD}
+  weighted\PYGZus{}hist \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{as.numeric}\PYG{p}{(}hist\PYG{o}{*}\PYG{l+m}{0}\PYG{o}{:}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}hist\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{))}                          \PYG{c+c1}{\PYGZsh{}WEIGHTED HIST STORED TO AVOID REPEATED CALCULATION}
+  class\PYGZus{}variance \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}\PYG{k+kp}{t}\PYG{p}{)} \PYG{p}{\PYGZob{}}                                               \PYG{c+c1}{\PYGZsh{}CALCULATE CLASS VARAINCE FOR PARTICULAR T VALUE}
+    update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Calculating Threshold\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}\PYG{k+kp}{t}\PYG{o}{/}\PYG{k+kp}{length}\PYG{p}{(}hist\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))}
+    range\PYGZus{}fg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{p}{(}\PYG{k+kp}{t}\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{:}\PYG{k+kp}{length}\PYG{p}{(}hist\PYG{p}{)}                                              \PYG{c+c1}{\PYGZsh{}VECTORS OF FOREGROUND \PYGZam{} BACKGROUND RANGES}
+    range\PYGZus{}bg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}\PYG{o}{:}\PYG{k+kp}{t}
+    weight\PYGZus{}fg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}fg\PYG{p}{])}\PYG{o}{/}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{)}
+    weight\PYGZus{}bg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}bg\PYG{p}{])}\PYG{o}{/}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{)}
+    mean\PYGZus{}fg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}fg\PYG{p}{])} \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{(}weighted\PYGZus{}hist\PYG{p}{[}range\PYGZus{}fg\PYG{p}{])}\PYG{o}{/}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}fg\PYG{p}{]),} \PYG{l+m}{0}\PYG{p}{)}   \PYG{c+c1}{\PYGZsh{}AVOID DIVISION BY ZERO}
+    mean\PYGZus{}bg \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}bg\PYG{p}{])} \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{(}weighted\PYGZus{}hist\PYG{p}{[}range\PYGZus{}bg\PYG{p}{])}\PYG{o}{/}\PYG{k+kp}{sum}\PYG{p}{(}hist\PYG{p}{[}range\PYGZus{}bg\PYG{p}{]),} \PYG{l+m}{0}\PYG{p}{)}
+    \PYG{k+kr}{return}\PYG{p}{(}weight\PYGZus{}fg\PYG{o}{*}weight\PYGZus{}bg\PYG{o}{*}\PYG{p}{(}mean\PYGZus{}bg\PYG{o}{\PYGZhy{}}mean\PYGZus{}fg\PYG{p}{)}\PYG{o}{\PYGZca{}}\PYG{l+m}{2}\PYG{p}{)}                             \PYG{c+c1}{\PYGZsh{}RETURN CLASS VARIANCE FOR GIVEN VALUE}
+  \PYG{p}{\PYGZcb{}}
+  class\PYGZus{}variances \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}hist\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} class\PYGZus{}variance\PYG{p}{)}                 \PYG{c+c1}{\PYGZsh{}CALCULATE CLASS VARIANCE FOR ALL POSSIBLE T\PYGZus{}VALUES}
+  t\PYGZus{}values \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{which}\PYG{p}{(}class\PYGZus{}variances\PYG{o}{==}\PYG{k+kp}{max}\PYG{p}{(}class\PYGZus{}variances\PYG{p}{))}
+  \PYG{k+kr}{return}\PYG{p}{(}median\PYG{p}{(}t\PYGZus{}values\PYG{p}{))}                                                      \PYG{c+c1}{\PYGZsh{}RETURN MEDIAN T\PYGZhy{}VALUE WITH MAX VARIANCE}
+\PYG{p}{\PYGZcb{}}
+
+
+threshold \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}grid\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                   \PYG{c+c1}{\PYGZsh{}THRESHOLD GREYSCALE GRID USING OTSU\PYGZsq{}S METHOD}
+  frequency \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Creating Histogram\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}x\PYG{o}{/}\PYG{k+kp}{max}\PYG{p}{(}grid\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))}
+    \PYG{k+kp}{sum}\PYG{p}{(}\PYG{k+kp}{as.numeric}\PYG{p}{(}grid\PYG{o}{==}x\PYG{p}{))} \PYG{p}{\PYGZcb{}}
+  hist \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{0}\PYG{o}{:}\PYG{k+kp}{max}\PYG{p}{(}grid\PYG{p}{),} frequency\PYG{p}{)}                                        \PYG{c+c1}{\PYGZsh{}CREATE HISTOGRAM OF LUMINANCE VALUES}
+  t \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}hist\PYG{p}{)} \PYG{o}{\PYGZgt{}} \PYG{l+m}{1}\PYG{p}{,} threshold\PYGZus{}value\PYG{p}{(}hist\PYG{p}{),} \PYG{l+m}{\PYGZhy{}1}\PYG{p}{)}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Creating Binary Grid\PYGZsq{}}\PYG{p}{)}
+  \PYG{k+kr}{if} \PYG{p}{(}INVERTED\PYG{p}{)} \PYG{p}{\PYGZob{}}threshold\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}grid \PYG{o}{\PYGZlt{}} \PYG{k+kp}{t}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{)\PYGZcb{}}                      \PYG{c+c1}{\PYGZsh{}IF INVERTED DARK = 0 \PYGZam{} LIGHT = 1}
+  \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}threshold\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}grid \PYG{o}{\PYGZgt{}} \PYG{k+kp}{t}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{)\PYGZcb{}}
+  \PYG{k+kr}{return}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)}                                                        \PYG{c+c1}{\PYGZsh{}RETURN BINARY MATRIX}
+\PYG{p}{\PYGZcb{}}
+
+
+local\PYGZus{}maximum \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}\PYG{k+kt}{vector}\PYG{p}{,} a\PYG{p}{,} b\PYG{p}{)} \PYG{p}{\PYGZob{}}                                       \PYG{c+c1}{\PYGZsh{}FINDS MAX VALUE IN GIVEN RANGE}
+  range \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{vector}\PYG{p}{[}a\PYG{o}{:}b\PYG{p}{]}
+  maximum \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{round}\PYG{p}{(}median\PYG{p}{(}\PYG{k+kp}{which}\PYG{p}{(}range\PYG{o}{==}\PYG{k+kp}{max}\PYG{p}{(}\PYG{k+kp}{range}\PYG{p}{))))}
+  \PYG{k+kr}{return}\PYG{p}{(}a \PYG{o}{+} maximum \PYG{o}{\PYGZhy{}} \PYG{l+m}{1}\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+
+wall\PYGZus{}data \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)} \PYG{p}{\PYGZob{}}                                         \PYG{c+c1}{\PYGZsh{}DETERMINES STRUCTURE OF WALLS FROM THRESHOLD GRID}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Calculating Frequencies\PYGZsq{}}\PYG{p}{)}
+  rows \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{nrow}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)}
+  cols \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ncol}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)}
+  frequencies\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{apply}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{)}                                \PYG{c+c1}{\PYGZsh{}CALCULATE FREQUENCY OF 1\PYGZsq{}S PER ROW/COLUMN}
+  frequencies\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{apply}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} \PYG{l+m}{2}\PYG{p}{,} \PYG{k+kp}{sum}\PYG{p}{)}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Finding Edges\PYGZsq{}}\PYG{p}{)}
+  edges\PYGZus{}up \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}\PYG{k+kp}{head}\PYG{p}{(}frequencies\PYGZus{}h\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{),} \PYG{k+kp}{diff}\PYG{p}{(}frequencies\PYGZus{}h\PYG{p}{))}                    \PYG{c+c1}{\PYGZsh{}FIND FREQ DIFFERENCES BETWEEN NEIGHBOURING ROWS/COLUMNS}
+  edges\PYGZus{}down \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}\PYG{k+kp}{diff}\PYG{p}{(}frequencies\PYGZus{}h\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} \PYG{k+kp}{tail}\PYG{p}{(}frequencies\PYGZus{}h\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{))}
+  edges\PYGZus{}left \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}\PYG{k+kp}{head}\PYG{p}{(}frequencies\PYGZus{}v\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{),} \PYG{k+kp}{diff}\PYG{p}{(}frequencies\PYGZus{}v\PYG{p}{))}
+  edges\PYGZus{}right \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}\PYG{k+kp}{diff}\PYG{p}{(}frequencies\PYGZus{}v\PYG{p}{)}\PYG{o}{*}\PYG{p}{(}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{),} \PYG{k+kp}{tail}\PYG{p}{(}frequencies\PYGZus{}v\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{))}
+  edges\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} merge\PYGZus{}sort\PYG{p}{(}\PYG{k+kp}{ifelse}\PYG{p}{(}edges\PYGZus{}up \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{,} edges\PYGZus{}up\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{))}                      \PYG{c+c1}{\PYGZsh{}REPLACE NEGATIVE EDGES}
+  edges\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} merge\PYGZus{}sort\PYG{p}{(}\PYG{k+kp}{ifelse}\PYG{p}{(}edges\PYGZus{}left \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{,} edges\PYGZus{}left\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{))}
+  edges\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} edges\PYGZus{}h\PYG{p}{[}\PYG{l+m}{1}\PYG{o}{:}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}edges\PYGZus{}h\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]}                                     \PYG{c+c1}{\PYGZsh{}REMOVE LARGEST AS THIS IS MAZE BOUNDARY}
+  edges\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} edges\PYGZus{}h\PYG{p}{[}\PYG{l+m}{1}\PYG{o}{:}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}edges\PYGZus{}h\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)]}
+
+  histogram\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{0}\PYG{o}{:}edges\PYGZus{}h\PYG{p}{[}\PYG{k+kp}{length}\PYG{p}{(}edges\PYGZus{}h\PYG{p}{)],} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{sum}\PYG{p}{(}edges\PYGZus{}h\PYG{o}{==}x\PYG{p}{))}\PYG{c+c1}{\PYGZsh{}CALCULATE THRESHOLD VALUE USING OTSU\PYGZsq{}S METHOD}
+  histogram\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{0}\PYG{o}{:}edges\PYGZus{}v\PYG{p}{[}\PYG{k+kp}{length}\PYG{p}{(}edges\PYGZus{}v\PYG{p}{)],} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{sum}\PYG{p}{(}edges\PYGZus{}v\PYG{o}{==}x\PYG{p}{))}
+  threshold\PYGZus{}h \PYG{o}{\PYGZlt{}\PYGZhy{}} threshold\PYGZus{}value\PYG{p}{(}histogram\PYGZus{}h\PYG{p}{)}                                   \PYG{c+c1}{\PYGZsh{}ROWS/COLUMNS WITH DIFFERENCES ABOVE THRESHOLD ARE WALLS}
+  threshold\PYGZus{}v \PYG{o}{\PYGZlt{}\PYGZhy{}} threshold\PYGZus{}value\PYG{p}{(}histogram\PYGZus{}v\PYG{p}{)}
+
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Finding Walls\PYGZsq{}}\PYG{p}{)}
+  walls\PYGZus{}up \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{which}\PYG{p}{(}edges\PYGZus{}up\PYG{o}{\PYGZgt{}}threshold\PYGZus{}h\PYG{p}{)}                                       \PYG{c+c1}{\PYGZsh{}POSITION OF HORIZONTAL/VERTICAL WALLS IN GRID}
+  walls\PYGZus{}down \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{which}\PYG{p}{(}edges\PYGZus{}down\PYG{o}{\PYGZgt{}}threshold\PYGZus{}h\PYG{p}{)}
+  walls\PYGZus{}left \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{which}\PYG{p}{(}edges\PYGZus{}left\PYG{o}{\PYGZgt{}}threshold\PYGZus{}v\PYG{p}{)}
+  walls\PYGZus{}right \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{which}\PYG{p}{(}edges\PYGZus{}right\PYG{o}{\PYGZgt{}}threshold\PYGZus{}v\PYG{p}{)}
+  wall\PYGZus{}widths \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}walls\PYGZus{}left\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} walls\PYGZus{}right\PYG{p}{[}walls\PYGZus{}right\PYG{o}{\PYGZgt{}=}x\PYG{p}{][}\PYG{l+m}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} x\PYG{p}{)}\PYG{c+c1}{\PYGZsh{}AVERAGE DISTANCE BETWEEN SIDES OF WALL}
+  wall\PYGZus{}heights \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}walls\PYGZus{}up\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} walls\PYGZus{}down\PYG{p}{[}walls\PYGZus{}down\PYG{o}{\PYGZgt{}=}x\PYG{p}{][}\PYG{l+m}{1}\PYG{p}{]} \PYG{o}{\PYGZhy{}} x\PYG{p}{)}
+  wall\PYGZus{}width \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}wall\PYGZus{}widths\PYG{p}{[}wall\PYGZus{}widths\PYG{o}{\PYGZlt{}=}median\PYG{p}{(}wall\PYGZus{}widths\PYG{p}{)])} \PYG{o}{+} \PYG{l+m}{1}         \PYG{c+c1}{\PYGZsh{}ADD 1 DUE TO UNDERCALCULATION OF SIZE}
+  wall\PYGZus{}height \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}wall\PYGZus{}heights\PYG{p}{[}wall\PYGZus{}heights\PYG{o}{\PYGZlt{}=}median\PYG{p}{(}wall\PYGZus{}heights\PYG{p}{)])} \PYG{o}{+} \PYG{l+m}{1}
+
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Finding Cells\PYGZsq{}}\PYG{p}{)}
+  cell\PYGZus{}widths \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{diff}\PYG{p}{(}walls\PYGZus{}left\PYG{p}{)}                                               \PYG{c+c1}{\PYGZsh{}GET DISTANCE BETWEEN NEIGHBOURING WALLS}
+  cell\PYGZus{}heights \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{diff}\PYG{p}{(}walls\PYGZus{}up\PYG{p}{)}
+  cell\PYGZus{}width \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}cell\PYGZus{}widths\PYG{p}{[}cell\PYGZus{}widths\PYG{o}{\PYGZlt{}=}median\PYG{p}{(}cell\PYGZus{}widths\PYG{p}{)])}             \PYG{c+c1}{\PYGZsh{}CALCULATE AVERAGE DISTANCE BETWEEN WALLS}
+  cell\PYGZus{}height \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}cell\PYGZus{}heights\PYG{p}{[}cell\PYGZus{}heights\PYG{o}{\PYGZlt{}=}median\PYG{p}{(}cell\PYGZus{}heights\PYG{p}{)])}
+
+  add\PYGZus{}left \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}i\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                     \PYG{c+c1}{\PYGZsh{}FINDS MISSING VERTICAL WALLS}
+    missing\PYGZus{}amount \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{round}\PYG{p}{(}cell\PYGZus{}widths\PYG{p}{[}i\PYG{p}{]} \PYG{o}{/} cell\PYGZus{}width\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m}{1}                    \PYG{c+c1}{\PYGZsh{}NUMBER OF WALLS MISSING}
+    \PYG{k+kr}{if} \PYG{p}{(}missing\PYGZus{}amount \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      mid\PYGZus{}estimates \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}missing\PYGZus{}amount\PYG{p}{)}\PYG{o}{*}cell\PYGZus{}width\PYG{o}{+}walls\PYGZus{}left\PYG{p}{[}i\PYG{p}{]}              \PYG{c+c1}{\PYGZsh{}FINDS MULTIPLE MISSING WALLS AT ONCE}
+      min\PYGZus{}ranges \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}mid\PYGZus{}estimates\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{round}\PYG{p}{(}x\PYG{l+m}{\PYGZhy{}0.5}\PYG{o}{*}cell\PYGZus{}width\PYG{p}{))}
+      max\PYGZus{}ranges \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}mid\PYGZus{}estimates\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{round}\PYG{p}{(}x\PYG{l+m}{+0.5}\PYG{o}{*}cell\PYGZus{}width\PYG{p}{))}
+      positions \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mapply}\PYG{p}{(}\PYG{k+kr}{function}\PYG{p}{(}a\PYG{p}{,} b\PYG{p}{)} local\PYGZus{}maximum\PYG{p}{(}edges\PYGZus{}left\PYG{p}{,} a\PYG{p}{,} b\PYG{p}{),} min\PYGZus{}ranges\PYG{p}{,} max\PYGZus{}ranges\PYG{p}{)} \PYG{c+c1}{\PYGZsh{}MOST LIKELY TO BE WALL}
+      \PYG{k+kr}{return}\PYG{p}{(}positions\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kc}{NA}\PYG{p}{)} \PYG{p}{\PYGZcb{}}                                                                \PYG{c+c1}{\PYGZsh{}RETURN PLACEHOLDER TO BE REMOVED}
+
+  add\PYGZus{}up \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}i\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                       \PYG{c+c1}{\PYGZsh{}FINDS MISSING HORIZONTAL WALLS}
+    missing\PYGZus{}amount \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{round}\PYG{p}{(}cell\PYGZus{}heights\PYG{p}{[}i\PYG{p}{]} \PYG{o}{/} cell\PYGZus{}height\PYG{p}{)} \PYG{o}{\PYGZhy{}} \PYG{l+m}{1}
+    \PYG{k+kr}{if} \PYG{p}{(}missing\PYGZus{}amount \PYG{o}{\PYGZgt{}} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}
+      mid\PYGZus{}estimates \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}missing\PYGZus{}amount\PYG{p}{)}\PYG{o}{*}cell\PYGZus{}height\PYG{o}{+}walls\PYGZus{}up\PYG{p}{[}i\PYG{p}{]}
+      min\PYGZus{}ranges \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}mid\PYGZus{}estimates\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{round}\PYG{p}{(}x\PYG{l+m}{\PYGZhy{}0.5}\PYG{o}{*}cell\PYGZus{}height\PYG{p}{))}
+      max\PYGZus{}ranges \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}mid\PYGZus{}estimates\PYG{p}{,} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{)} \PYG{k+kp}{round}\PYG{p}{(}x\PYG{l+m}{+0.5}\PYG{o}{*}cell\PYGZus{}height\PYG{p}{))}
+      positions \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mapply}\PYG{p}{(}\PYG{k+kr}{function}\PYG{p}{(}a\PYG{p}{,} b\PYG{p}{)} local\PYGZus{}maximum\PYG{p}{(}edges\PYGZus{}up\PYG{p}{,} a\PYG{p}{,} b\PYG{p}{),} min\PYGZus{}ranges\PYG{p}{,} max\PYGZus{}ranges\PYG{p}{)}
+      \PYG{k+kr}{return}\PYG{p}{(}positions\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kc}{NA}\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Locating Missing Walls\PYGZsq{}}\PYG{p}{)}
+  missing\PYGZus{}left \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{k+kp}{length}\PYG{p}{(}cell\PYGZus{}widths\PYG{p}{),} add\PYGZus{}left\PYG{p}{)}                       \PYG{c+c1}{\PYGZsh{}FIND MISSING WALLS}
+  missing\PYGZus{}up \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{sapply}\PYG{p}{(}\PYG{l+m}{1}\PYG{o}{:}\PYG{k+kp}{length}\PYG{p}{(}cell\PYGZus{}heights\PYG{p}{),} add\PYGZus{}up\PYG{p}{)}
+  walls\PYGZus{}horizontal \PYG{o}{\PYGZlt{}\PYGZhy{}} merge\PYGZus{}sort\PYG{p}{(}\PYG{k+kp}{unlist}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}walls\PYGZus{}up\PYG{p}{,} missing\PYGZus{}up\PYG{p}{[}\PYG{o}{!}\PYG{k+kp}{is.na}\PYG{p}{(}missing\PYGZus{}up\PYG{p}{)])))}\PYG{c+c1}{\PYGZsh{}ADD MISSING AND SORT INTO CORRECT ORDER}
+  walls\PYGZus{}vertical \PYG{o}{\PYGZlt{}\PYGZhy{}} merge\PYGZus{}sort\PYG{p}{(}\PYG{k+kp}{unlist}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}walls\PYGZus{}left\PYG{p}{,} missing\PYGZus{}left\PYG{p}{[}\PYG{o}{!}\PYG{k+kp}{is.na}\PYG{p}{(}missing\PYGZus{}left\PYG{p}{)])))}
+
+  cell\PYGZus{}data \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{c}\PYG{p}{(}cell\PYGZus{}width\PYG{p}{,} wall\PYGZus{}width\PYG{p}{,} cell\PYGZus{}height\PYG{p}{,} wall\PYGZus{}height\PYG{p}{)}              \PYG{c+c1}{\PYGZsh{}DATA TO BE RETURNED}
+  range \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{l+m}{1}\PYG{o}{:}\PYG{k+kp}{max}\PYG{p}{(}\PYG{k+kp}{length}\PYG{p}{(}cell\PYGZus{}data\PYG{p}{),}\PYG{k+kp}{length}\PYG{p}{(}walls\PYGZus{}horizontal\PYG{p}{),}\PYG{k+kp}{length}\PYG{p}{(}walls\PYGZus{}vertical\PYG{p}{))}\PYG{c+c1}{\PYGZsh{}MATRIX PADDED WITH NA\PYGZsq{}S FOR DIFFERENT LENGTHS}
+  \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kt}{matrix}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}cell\PYGZus{}data\PYG{p}{[}\PYG{k+kp}{range}\PYG{p}{],}walls\PYGZus{}horizontal\PYG{p}{[}\PYG{k+kp}{range}\PYG{p}{],}walls\PYGZus{}vertical\PYG{p}{[}\PYG{k+kp}{range}\PYG{p}{]),}ncol\PYG{o}{=}\PYG{l+m}{3}\PYG{p}{))}
+\PYG{p}{\PYGZcb{}}
+
+
+maze \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} structure\PYGZus{}matrix\PYG{p}{)} \PYG{p}{\PYGZob{}}                            \PYG{c+c1}{\PYGZsh{}CREATE MAZE GRID FROM THRESHOLD GRID}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Calculating Structure\PYGZsq{}}\PYG{p}{)}
+  wall\PYGZus{}width \PYG{o}{\PYGZlt{}\PYGZhy{}} structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]}
+  wall\PYGZus{}height \PYG{o}{\PYGZlt{}\PYGZhy{}} structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]}
+  walls\PYGZus{}horizontal \PYG{o}{\PYGZlt{}\PYGZhy{}} structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{2}\PYG{p}{][}\PYG{o}{!}\PYG{k+kp}{is.na}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{2}\PYG{p}{])]}
+  walls\PYGZus{}vertical \PYG{o}{\PYGZlt{}\PYGZhy{}} structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{3}\PYG{p}{][}\PYG{o}{!}\PYG{k+kp}{is.na}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{3}\PYG{p}{])]}
+  dimensions\PYGZus{}x \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{length}\PYG{p}{(}walls\PYGZus{}vertical\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}
+  dimensions\PYGZus{}y \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{length}\PYG{p}{(}walls\PYGZus{}horizontal\PYG{p}{)}\PYG{l+m}{\PYGZhy{}1}
+
+  section\PYGZus{}density \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{(}x\PYG{p}{,} y\PYG{p}{)} \PYG{p}{\PYGZob{}}                                           \PYG{c+c1}{\PYGZsh{}CALCULATE FRACTION OF 1\PYGZsq{}S IN SECTION}
+    \PYG{k+kr}{if} \PYG{p}{(}y \PYG{o}{==} \PYG{l+m}{1}\PYG{p}{)} \PYG{p}{\PYGZob{}}update\PYG{p}{(}\PYG{k+kp}{paste}\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Building Maze\PYGZsq{}}\PYG{p}{,}\PYG{k+kp}{round}\PYG{p}{(}x\PYG{o}{/}\PYG{p}{(}dimensions\PYGZus{}x\PYG{o}{*}\PYG{l+m}{2+1}\PYG{p}{)}\PYG{o}{*}\PYG{l+m}{100}\PYG{p}{),}\PYG{l+s}{\PYGZsq{}\PYGZpc{}\PYGZsq{}}\PYG{p}{))\PYGZcb{}}
+    \PYG{k+kr}{if} \PYG{p}{(}x \PYG{o}{\PYGZpc{}\PYGZpc{}} \PYG{l+m}{2} \PYG{o}{==} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                          \PYG{c+c1}{\PYGZsh{}SECTION OF WALL (VERTICAL)}
+      range\PYGZus{}x \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{p}{(}walls\PYGZus{}vertical\PYG{p}{[}x\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{+}wall\PYGZus{}width\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}walls\PYGZus{}vertical\PYG{p}{[}x\PYG{o}{/}\PYG{l+m}{2+1}\PYG{p}{]}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}                                                                      \PYG{c+c1}{\PYGZsh{}SECTION OF PATH}
+      range\PYGZus{}x \PYG{o}{\PYGZlt{}\PYGZhy{}} walls\PYGZus{}vertical\PYG{p}{[(}x\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{:}\PYG{p}{(}walls\PYGZus{}vertical\PYG{p}{[(}x\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{+}wall\PYGZus{}width\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{if} \PYG{p}{(}y \PYG{o}{\PYGZpc{}\PYGZpc{}} \PYG{l+m}{2} \PYG{o}{==} \PYG{l+m}{0}\PYG{p}{)} \PYG{p}{\PYGZob{}}                                                          \PYG{c+c1}{\PYGZsh{}SECTION OF WALL (HORIZONTAL)}
+      range\PYGZus{}y \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{p}{(}walls\PYGZus{}horizontal\PYG{p}{[}y\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{+}wall\PYGZus{}height\PYG{p}{)}\PYG{o}{:}\PYG{p}{(}walls\PYGZus{}horizontal\PYG{p}{[}y\PYG{o}{/}\PYG{l+m}{2+1}\PYG{p}{]}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    \PYG{k+kr}{else} \PYG{p}{\PYGZob{}}                                                                      \PYG{c+c1}{\PYGZsh{}SECTION OF PATH}
+      range\PYGZus{}y \PYG{o}{\PYGZlt{}\PYGZhy{}} walls\PYGZus{}horizontal\PYG{p}{[(}y\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{:}\PYG{p}{(}walls\PYGZus{}horizontal\PYG{p}{[(}y\PYG{l+m}{+1}\PYG{p}{)}\PYG{o}{/}\PYG{l+m}{2}\PYG{p}{]}\PYG{o}{+}wall\PYGZus{}height\PYG{l+m}{\PYGZhy{}1}\PYG{p}{)} \PYG{p}{\PYGZcb{}}
+    section \PYG{o}{\PYGZlt{}\PYGZhy{}} threshold\PYGZus{}grid\PYG{p}{[}range\PYGZus{}y\PYG{p}{,}range\PYGZus{}x\PYG{p}{]}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kp}{mean}\PYG{p}{(}section\PYG{p}{))} \PYG{p}{\PYGZcb{}}
+
+  empty\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{matrix}\PYG{p}{(}\PYG{l+m}{0}\PYG{p}{,} nrow\PYG{o}{=}dimensions\PYGZus{}y\PYG{o}{*}\PYG{l+m}{2+1}\PYG{p}{,} ncol\PYG{o}{=}dimensions\PYGZus{}x\PYG{o}{*}\PYG{l+m}{2+1}\PYG{p}{)}         \PYG{c+c1}{\PYGZsh{}EMPTY GRID REPRESENTING EACH SECTION}
+  density\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kt}{matrix}\PYG{p}{(}\PYG{k+kp}{mapply}\PYG{p}{(}section\PYGZus{}density\PYG{p}{,} \PYG{k+kp}{col}\PYG{p}{(}empty\PYGZus{}grid\PYG{p}{),} \PYG{k+kp}{row}\PYG{p}{(}empty\PYGZus{}grid\PYG{p}{)),} nrow\PYG{o}{=}\PYG{k+kp}{nrow}\PYG{p}{(}empty\PYGZus{}grid\PYG{p}{))}
+  maze\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{ifelse}\PYG{p}{(}density\PYGZus{}grid \PYG{o}{\PYGZgt{}} \PYG{l+m}{0.25}\PYG{p}{,} \PYG{l+m}{1}\PYG{p}{,} \PYG{l+m}{0}\PYG{p}{)}                                \PYG{c+c1}{\PYGZsh{}DENSITIES ABOVE 25\PYGZpc{} ARE WALL SECTIONS}
+  \PYG{k+kr}{return}\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+
+output \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{tryCatch}\PYG{p}{(}                                                             \PYG{c+c1}{\PYGZsh{}CATCH AND RETURN QUIT ERRORS}
+  \PYG{p}{\PYGZob{}}main\PYG{p}{()\PYGZcb{},}
+  error\PYG{o}{=}\PYG{k+kr}{function}\PYG{p}{(}cond\PYG{p}{)} \PYG{p}{\PYGZob{}}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kp}{geterrmessage}\PYG{p}{())}
+  \PYG{p}{\PYGZcb{}}
+\PYG{p}{)}
+\PYG{k+kp}{cat}\PYG{p}{(}output\PYG{p}{)}                                                                     \PYG{c+c1}{\PYGZsh{}RETURN OUTPUT TO PYTHON}
+\end{Verbatim}

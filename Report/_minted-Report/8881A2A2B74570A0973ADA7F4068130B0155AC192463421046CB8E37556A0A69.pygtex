@@ -1,0 +1,38 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{class} \PYG{n+nc}{Quit}\PYG{p}{(}\PYG{n+ne}{Exception}\PYG{p}{):}                                                          \PYG{c+c1}{\PYGZsh{}CUSTOM ERROR CLASS TO QUIT THREADS}
+    \PYG{k}{pass}
+
+
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}update\PYGZus{}file}\PYG{p}{():}                                                          \PYG{c+c1}{\PYGZsh{}RETURNS NAME OF UPDATE FILE}
+    \PYG{k}{return} \PYG{l+s+s1}{\PYGZsq{}update.txt\PYGZsq{}}
+
+
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}quit\PYGZus{}file}\PYG{p}{():}                                                            \PYG{c+c1}{\PYGZsh{}RETURNS NAME OF QUIT FILE}
+    \PYG{k}{return} \PYG{l+s+s1}{\PYGZsq{}quit.txt\PYGZsq{}}
+
+
+\PYG{k}{def} \PYG{n+nf}{set\PYGZus{}update}\PYG{p}{(}\PYG{n}{text}\PYG{p}{):}                                                           \PYG{c+c1}{\PYGZsh{}SETS THE TEXT IN THE UPDATE FILE}
+    \PYG{n}{check\PYGZus{}quit}\PYG{p}{()}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{get\PYGZus{}update\PYGZus{}file}\PYG{p}{(),} \PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{n}{text}\PYG{p}{)}                                                            \PYG{c+c1}{\PYGZsh{}OVERWRITES THE FILE}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+
+\PYG{k}{def} \PYG{n+nf}{get\PYGZus{}update}\PYG{p}{():}                                                               \PYG{c+c1}{\PYGZsh{}RETURNS TEXT IN UPDATE FILE}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{get\PYGZus{}update\PYGZus{}file}\PYG{p}{(),} \PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{text} \PYG{o}{=} \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{read}\PYG{p}{()}\PYG{o}{.}\PYG{n}{replace}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}}\PYG{l+s+se}{\PYGZbs{}n}\PYG{l+s+s1}{\PYGZsq{}}\PYG{p}{,}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}                                         \PYG{c+c1}{\PYGZsh{}READ FILE AND RETURN CONTENTS}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{k}{return} \PYG{n}{text}
+
+
+\PYG{k}{def} \PYG{n+nf}{set\PYGZus{}quitting}\PYG{p}{(}\PYG{n}{quitting}\PYG{p}{):}                                                     \PYG{c+c1}{\PYGZsh{}SETS THE TEXT IN THE QUIT FILE}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{get\PYGZus{}quit\PYGZus{}file}\PYG{p}{(),} \PYG{l+s+s1}{\PYGZsq{}w\PYGZsq{}}\PYG{p}{)}
+    \PYG{k}{if} \PYG{n}{quitting} \PYG{p}{:} \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}q\PYGZsq{}}\PYG{p}{)}                                               \PYG{c+c1}{\PYGZsh{}IF QUITTING THEN \PYGZsq{}q\PYGZsq{}}
+    \PYG{k}{else} \PYG{p}{:} \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{write}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}\PYGZsq{}}\PYG{p}{)}                                                       \PYG{c+c1}{\PYGZsh{}IF NOT QUITTING THEN EMPTY}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+
+
+\PYG{k}{def} \PYG{n+nf}{check\PYGZus{}quit}\PYG{p}{():}                                                               \PYG{c+c1}{\PYGZsh{}CHECKS IF PROCESS SHOULD BE QUIT}
+    \PYG{n}{status} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{n}{get\PYGZus{}quit\PYGZus{}file}\PYG{p}{())}\PYG{o}{.}\PYG{n}{read}\PYG{p}{()}
+    \PYG{k}{if} \PYG{n}{status} \PYG{o}{==} \PYG{l+s+s1}{\PYGZsq{}q\PYGZsq{}} \PYG{p}{:} \PYG{k}{raise} \PYG{n}{Quit}                                               \PYG{c+c1}{\PYGZsh{}RAISE QUIT ERROR IF QUITTING}
+\end{Verbatim}

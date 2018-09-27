@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+main \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kr}{function}\PYG{p}{()} \PYG{p}{\PYGZob{}}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Loading Greyscale\PYGZsq{}}\PYG{p}{)}
+  threshold\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} threshold\PYG{p}{(}GREYSCALE\PYGZus{}GRID\PYG{p}{)}
+  write.table\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} \PYG{l+s}{\PYGZsq{}threshold.csv\PYGZsq{}}\PYG{p}{,}row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+  \PYG{k+kr}{if} \PYG{p}{(}RECTILINEAR\PYG{p}{)} \PYG{p}{\PYGZob{}}                                          \PYG{c+c1}{\PYGZsh{}\PYGZca{}\PYGZca{}SAVE THRESHOLD GRID\PYGZca{}\PYGZca{}}
+    structure\PYGZus{}matrix \PYG{o}{\PYGZlt{}\PYGZhy{}} wall\PYGZus{}data\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{)}
+    maze\PYGZus{}grid \PYG{o}{\PYGZlt{}\PYGZhy{}} maze\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} structure\PYGZus{}matrix\PYG{p}{)}
+    update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Saving Maze\PYGZsq{}}\PYG{p}{)}
+    write.table\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[,}\PYG{l+m}{3}\PYG{o}{:}\PYG{l+m}{2}\PYG{p}{]}\PYG{l+m}{\PYGZhy{}1}\PYG{p}{,} file \PYG{o}{=} WALL\PYGZus{}FILE\PYG{p}{,}                     \PYG{c+c1}{\PYGZsh{}R INDEXING AND X BEFORE Y}
+                row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+    write.table\PYG{p}{(}maze\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} MAZE\PYGZus{}FILE\PYG{p}{,}
+                row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+    cell\PYGZus{}size \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{1}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{],}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{3}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]))}
+    wall\PYGZus{}size \PYG{o}{\PYGZlt{}\PYGZhy{}} \PYG{k+kp}{mean}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{2}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{],}structure\PYGZus{}matrix\PYG{p}{[}\PYG{l+m}{4}\PYG{p}{,}\PYG{l+m}{1}\PYG{p}{]))}
+    \PYG{k+kr}{return}\PYG{p}{(}\PYG{k+kt}{c}\PYG{p}{(}WALL\PYGZus{}FILE\PYG{p}{,} MAZE\PYGZus{}FILE\PYG{p}{,} cell\PYGZus{}size\PYG{p}{,} wall\PYGZus{}size\PYG{p}{))}
+  \PYG{p}{\PYGZcb{}}
+  update\PYG{p}{(}\PYG{l+s}{\PYGZsq{}Saving Maze\PYGZsq{}}\PYG{p}{)}
+  write.table\PYG{p}{(}threshold\PYGZus{}grid\PYG{p}{,} file \PYG{o}{=} MAZE\PYGZus{}FILE\PYG{p}{,}row.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,} col.names \PYG{o}{=} \PYG{k+kc}{FALSE}\PYG{p}{,}sep \PYG{o}{=} \PYG{l+s}{\PYGZdq{},\PYGZdq{}}\PYG{p}{)}
+  \PYG{k+kr}{return}\PYG{p}{(}MAZE\PYGZus{}FILE\PYG{p}{)}
+\PYG{p}{\PYGZcb{}}
+\end{Verbatim}

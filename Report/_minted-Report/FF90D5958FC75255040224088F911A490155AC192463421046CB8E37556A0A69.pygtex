@@ -1,0 +1,18 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{display\PYGZus{}walls}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{p}{):}
+    \PYG{n}{walls\PYGZus{}grid} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}walls.csv\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{vertical\PYGZus{}walls} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{n}{horizontal\PYGZus{}walls} \PYG{o}{=} \PYG{p}{[]}
+    \PYG{k}{for} \PYG{n}{data} \PYG{o+ow}{in} \PYG{n}{walls\PYGZus{}grid}\PYG{p}{:}
+        \PYG{n}{vertical\PYGZus{}walls}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}
+        \PYG{n}{horizontal\PYGZus{}walls}\PYG{o}{.}\PYG{n}{append}\PYG{p}{(}\PYG{n}{data}\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{])}
+    \PYG{n}{img} \PYG{o}{=} \PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{rgb}\PYG{p}{()}
+    \PYG{n}{pixels} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n}{vertical\PYGZus{}walls}\PYG{p}{:}
+        \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{height}\PYG{p}{):}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}
+    \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n}{vertical\PYGZus{}walls}\PYG{p}{:}
+        \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb+bp}{self}\PYG{o}{.}\PYG{n}{width}\PYG{p}{):}
+            \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}
+    \PYG{n}{img}\PYG{o}{.}\PYG{n}{show}\PYG{p}{()}
+\end{Verbatim}

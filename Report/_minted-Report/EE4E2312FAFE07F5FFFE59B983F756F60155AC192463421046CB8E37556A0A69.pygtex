@@ -1,0 +1,19 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{display\PYGZus{}ordered\PYGZus{}nodes}\PYG{p}{():}
+    \PYG{n}{node\PYGZus{}grid} \PYG{o}{=} \PYG{n}{csv}\PYG{o}{.}\PYG{n}{open\PYGZus{}integer\PYGZus{}grid}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}nodes\PYGZus{}display.csv\PYGZsq{}}\PYG{p}{)}
+    \PYG{n+nb}{file} \PYG{o}{=} \PYG{n+nb}{open}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}nodes\PYGZus{}visited.txt\PYGZsq{}}\PYG{p}{,} \PYG{l+s+s1}{\PYGZsq{}r\PYGZsq{}}\PYG{p}{)}
+    \PYG{n}{total} \PYG{o}{=} \PYG{n+nb}{int}\PYG{p}{(}\PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{read}\PYG{p}{())}
+    \PYG{n+nb}{file}\PYG{o}{.}\PYG{n}{close}\PYG{p}{()}
+    \PYG{n}{img} \PYG{o}{=} \PYG{n}{PIL}\PYG{o}{.}\PYG{n}{new}\PYG{p}{(}\PYG{l+s+s1}{\PYGZsq{}RGB\PYGZsq{}}\PYG{p}{,(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{node\PYGZus{}grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{]),}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{node\PYGZus{}grid}\PYG{p}{)))}
+    \PYG{n}{pixels} \PYG{o}{=} \PYG{n}{img}\PYG{o}{.}\PYG{n}{load}\PYG{p}{()}
+    \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{node\PYGZus{}grid}\PYG{p}{)):}
+        \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{node\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{])):}
+            \PYG{k}{if} \PYG{n}{node\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+                \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{p}{)}
+            \PYG{k}{elif} \PYG{n}{node\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{1}\PYG{p}{:}
+                \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{)}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{colour} \PYG{o}{=} \PYG{n+nb}{round}\PYG{p}{(}\PYG{l+m+mi}{255} \PYG{o}{*} \PYG{n}{node\PYGZus{}grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{/} \PYG{n}{total}\PYG{p}{)}
+                \PYG{n}{pixels}\PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o}{=} \PYG{p}{(}\PYG{n}{colour}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{255}\PYG{o}{\PYGZhy{}}\PYG{n}{colour}\PYG{p}{)}
+    \PYG{k}{return} \PYG{n}{img}
+\end{Verbatim}

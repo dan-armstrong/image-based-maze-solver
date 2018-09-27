@@ -1,0 +1,22 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{valid\PYGZus{}node}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{grid}\PYG{p}{,} \PYG{n}{end\PYGZus{}points}\PYG{p}{):}                                         \PYG{c+c1}{\PYGZsh{}RETURNS TRUE/FALSE IS CELL IS NODE OR NOT}
+    \PYG{k}{if} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{p}{:} \PYG{k}{return} \PYG{n+nb+bp}{False}                                           \PYG{c+c1}{\PYGZsh{}CELL IS WALL}
+    \PYG{k}{if} \PYG{p}{[}\PYG{n}{x}\PYG{p}{,}\PYG{n}{y}\PYG{p}{]} \PYG{o+ow}{in} \PYG{n}{end\PYGZus{}points} \PYG{p}{:} \PYG{k}{return} \PYG{n+nb+bp}{True}
+    \PYG{n}{nbrs\PYGZus{}h} \PYG{o}{=} \PYG{l+m+mi}{0}                                                                  \PYG{c+c1}{\PYGZsh{}COUNT NUMBER OF HORIZONTAL/VERTICAL NBRS}
+    \PYG{n}{nbrs\PYGZus{}v} \PYG{o}{=} \PYG{l+m+mi}{0}
+    \PYG{k}{if} \PYG{n}{x} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{p}{:} \PYG{n}{nbrs\PYGZus{}h} \PYG{o}{+=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{k}{if} \PYG{n}{y} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{0} \PYG{p}{:} \PYG{n}{nbrs\PYGZus{}v} \PYG{o}{+=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]}
+    \PYG{k}{if} \PYG{n}{x} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{p}{:} \PYG{n}{nbrs\PYGZus{}h} \PYG{o}{+=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n}{x}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{]}
+    \PYG{k}{if} \PYG{n}{y} \PYG{o}{\PYGZlt{}} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1} \PYG{p}{:} \PYG{n}{nbrs\PYGZus{}v} \PYG{o}{+=} \PYG{l+m+mi}{1} \PYG{o}{\PYGZhy{}} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{o}{+}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]}
+    \PYG{k}{if} \PYG{n}{nbrs\PYGZus{}h} \PYG{o}{+} \PYG{n}{nbrs\PYGZus{}v} \PYG{o}{\PYGZgt{}} \PYG{l+m+mi}{2} \PYG{p}{:} \PYG{k}{return} \PYG{n+nb+bp}{True}                                        \PYG{c+c1}{\PYGZsh{}CELL IS JUNCTION}
+    \PYG{k}{if} \PYG{n}{nbrs\PYGZus{}h} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{o+ow}{and} \PYG{n}{nbrs\PYGZus{}v} \PYG{o}{==} \PYG{l+m+mi}{1} \PYG{p}{:} \PYG{k}{return} \PYG{n+nb+bp}{True}                                \PYG{c+c1}{\PYGZsh{}CELL IS CORNER}
+    \PYG{k}{return} \PYG{n+nb+bp}{False}
+
+\PYG{n}{g} \PYG{o}{=} \PYG{p}{[[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{],}                                                                   \PYG{c+c1}{\PYGZsh{}TEST GRID}
+     \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{],}
+     \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{]]}
+\PYG{n}{ep} \PYG{o}{=} \PYG{p}{[[}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{],} \PYG{p}{[}\PYG{l+m+mi}{2}\PYG{p}{,}\PYG{l+m+mi}{2}\PYG{p}{]]}                                                             \PYG{c+c1}{\PYGZsh{}TEST END POINTS}
+\PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{):}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{3}\PYG{p}{):}
+        \PYG{k}{print}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{valid\PYGZus{}node}\PYG{p}{(}\PYG{n}{x}\PYG{p}{,} \PYG{n}{y}\PYG{p}{,} \PYG{n}{g}\PYG{p}{,} \PYG{n}{ep}\PYG{p}{))}
+\end{Verbatim}

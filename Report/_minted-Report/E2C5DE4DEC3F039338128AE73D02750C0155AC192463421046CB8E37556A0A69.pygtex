@@ -1,0 +1,49 @@
+\begin{Verbatim}[commandchars=\\\{\}]
+\PYG{k}{def} \PYG{n+nf}{auto\PYGZus{}end\PYGZus{}points}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{):}                                                      \PYG{c+c1}{\PYGZsh{}RETURN COORDINATES OF END POINTS}
+    \PYG{n}{start\PYGZus{}point} \PYG{o}{=} \PYG{n+nb+bp}{None}
+    \PYG{n}{end\PYGZus{}point} \PYG{o}{=} \PYG{n+nb+bp}{None}
+    \PYG{n}{found} \PYG{o}{=} \PYG{n+nb+bp}{False}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])):}                                               \PYG{c+c1}{\PYGZsh{}LOOP THROUGH TOP ROW}
+        \PYG{k}{if} \PYG{n}{found} \PYG{p}{:} \PYG{k}{break}
+        \PYG{k}{if} \PYG{n}{grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{start\PYGZus{}point} \PYG{o}{==} \PYG{n+nb+bp}{None}\PYG{p}{:}
+                \PYG{n}{start\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n}{x}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{end\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n}{x}\PYG{p}{,} \PYG{l+m+mi}{0}\PYG{p}{]}
+                \PYG{n}{found} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{k}{for} \PYG{n}{x} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{])):}                                     \PYG{c+c1}{\PYGZsh{}LOOP THROUGH BOTTOM ROW}
+        \PYG{k}{if} \PYG{n}{found} \PYG{p}{:} \PYG{k}{break}
+        \PYG{k}{if} \PYG{n}{grid}\PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{][}\PYG{n}{x}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{start\PYGZus{}point} \PYG{o}{==} \PYG{n+nb+bp}{None}\PYG{p}{:}
+                \PYG{n}{start\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n}{x}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{end\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n}{x}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]}
+                \PYG{n}{found} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}                                             \PYG{c+c1}{\PYGZsh{}LOOP THROUGH LEFT COL}
+        \PYG{k}{if} \PYG{n}{found} \PYG{p}{:} \PYG{k}{break}
+        \PYG{k}{if} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{l+m+mi}{0}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{start\PYGZus{}point} \PYG{o}{==} \PYG{n+nb+bp}{None}\PYG{p}{:}
+                \PYG{n}{start\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{y}\PYG{p}{]}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{end\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{,} \PYG{n}{y}\PYG{p}{]}
+                \PYG{n}{found} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{k}{for} \PYG{n}{y} \PYG{o+ow}{in} \PYG{n+nb}{range}\PYG{p}{(}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{)}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{):}                                             \PYG{c+c1}{\PYGZsh{}LOOP THROUGH RIGHT COL}
+        \PYG{k}{if} \PYG{n}{found} \PYG{p}{:} \PYG{k}{break}
+        \PYG{k}{if} \PYG{n}{grid}\PYG{p}{[}\PYG{n}{y}\PYG{p}{][}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{]} \PYG{o}{==} \PYG{l+m+mi}{0}\PYG{p}{:}
+            \PYG{k}{if} \PYG{n}{start\PYGZus{}point} \PYG{o}{==} \PYG{n+nb+bp}{None}\PYG{p}{:}
+                \PYG{n}{start\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{y}\PYG{p}{]}
+            \PYG{k}{else}\PYG{p}{:}
+                \PYG{n}{end\PYGZus{}point} \PYG{o}{=} \PYG{p}{[}\PYG{n+nb}{len}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{[}\PYG{l+m+mi}{0}\PYG{p}{])}\PYG{o}{\PYGZhy{}}\PYG{l+m+mi}{1}\PYG{p}{,} \PYG{n}{y}\PYG{p}{]}
+                \PYG{n}{found} \PYG{o}{=} \PYG{n+nb+bp}{True}
+    \PYG{k}{if} \PYG{n}{end\PYGZus{}point} \PYG{o}{==} \PYG{n+nb+bp}{None}\PYG{p}{:}
+        \PYG{k}{return} \PYG{n+nb+bp}{None}
+    \PYG{k}{return} \PYG{p}{[}\PYG{n}{start\PYGZus{}point}\PYG{p}{,} \PYG{n}{end\PYGZus{}point}\PYG{p}{]}
+
+\PYG{n}{grid} \PYG{o}{=} \PYG{p}{[[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],}                                                               \PYG{c+c1}{\PYGZsh{}TEST GRID}
+\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],}
+\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],}
+\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{],}
+\PYG{p}{[}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{,}\PYG{l+m+mi}{0}\PYG{p}{,}\PYG{l+m+mi}{1}\PYG{p}{]]}
+
+\PYG{k}{print}\PYG{p}{(}\PYG{n}{auto\PYGZus{}end\PYGZus{}points}\PYG{p}{(}\PYG{n}{grid}\PYG{p}{))}
+\end{Verbatim}
